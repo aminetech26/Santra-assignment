@@ -32,6 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeSliderBloc = getItInstance<HomeSliderBloc>();
     _shopCardBloc = getItInstance<ShopCardBloc>();
     _userAreaBloc = getItInstance<UserAreaBloc>();
+    _userAreaBloc.add(UserAreaLoad());
+    _shopCardBloc.add(ShopCardLoad());
+    _categoriesBloc.add(CategoriesLoadEvent());
+    _homeSliderBloc.add(HomeSliderLoadEvent());
+    _topSellersBloc.add(TopSellersLoadEvent());
+    _allSellersBloc.add(AllSellersLoadEvent());
   }
 
   @override
@@ -55,8 +61,32 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider(
           create: (context) => _categoriesBloc,
         ),
+        BlocProvider(
+          create: (context) => _topSellersBloc,
+        ),
+        BlocProvider(
+          create: (context) => _homeSliderBloc,
+        ),
+        BlocProvider(
+          create: (context) => _userAreaBloc,
+        ),
+        BlocProvider(
+          create: (context) => _shopCardBloc,
+        ),
       ],
-      child: Placeholder(),
+      child: Scaffold(
+        body: Column(
+          children: [
+            BlocBuilder(builder: (context, state) {
+              if (state is UserAreaLoaded) {
+                return SafeArea(child: AppBar());
+              } else {
+                return CircularProgressIndicator();
+              }
+            }),
+          ],
+        ),
+      ),
     );
   }
 }
